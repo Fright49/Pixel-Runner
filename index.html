@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <title>Pixel Runner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div id="mainMenu" class="menu-screen">
+            <h1>PIXEL RUNNER</h1>
+            <div id="menu" class="menu">
+                <div id="menuText" class="menu-text">Najlepszy wynik: <span id="highScore">0</span> | Zebrane monety: <span id="totalCoins">0</span></div>
+                <button id="startButton">Start Gry</button>
+                <button id="shopButton">Sklep</button>
+                <button id="instructionsButton">Instrukcje</button>
+            </div>
+        </div>
+        
+        <div id="instructionsScreen" class="menu-screen hidden">
+            <h2>Instrukcje Gry</h2>
+            <div class="instructions-container">
+                <div class="instruction-section">
+                    <div class="instruction-icon">⌨️</div>
+                    <h3>Sterowanie</h3>
+                    <p>Naciśnij SPACJĘ lub dotknij ekranu, aby skoczyć</p>
+                    <p>Przytrzymaj F, aby przejść w tryb pełnoekranowy</p>
+                </div>
+                
+                <div class="instruction-section">
+                    <div class="instruction-icon">🎮</div>
+                    <h3>Rozgrywka</h3>
+                    <p>Unikaj przeszkód i zbieraj monety</p>
+                    <p>Im dłużej przetrwasz, tym szybsza staje się gra</p>
+                    <p>Wykorzystuj power-upy do zdobycia przewagi</p>
+                </div>
+                
+                <div class="instruction-section">
+                    <div class="instruction-icon">⭐</div>
+                    <h3>Power-upy</h3>
+                    <p>🛡️ Tarcza - chroni przed jednym uderzeniem</p>
+                    <p>⚡ Mnożnik - podwaja zdobywane punkty</p>
+                    <p>🏃 Podwójny skok - możliwość wykonania drugiego skoku w powietrzu</p>
+                </div>
+                
+                <div class="instruction-section">
+                    <div class="instruction-icon">💰</div>
+                    <h3>Sklep</h3>
+                    <p>Wydawaj zebrane monety na ulepszenia</p>
+                    <p>Odblokowuj nowe skiny postaci i przeciwników</p>
+                    <p>Kupuj power-upy do wykorzystania w grze</p>
+                </div>
+            </div>
+            <button id="backToMenuButton" class="back-button">Powrót do Menu</button>
+        </div>
+
+        <div id="shopScreen" class="menu-screen hidden">
+            <h2>Sklep</h2>
+            <div id="shopCoins" class="menu-text">Monety: <span id="shopTotalCoins">0</span></div>
+            <div class="shop-items">
+                <div class="shop-item">
+                    <div class="item-icon">🛡️</div>
+                    <div class="item-info">
+                        <h3>Tarcza Startowa</h3>
+                        <p>Rozpocznij grę z tarczą</p>
+                        <div class="item-price">Cena: 100 🪙</div>
+                    </div>
+                    <button id="buyShield" class="shop-button">Kup</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-icon">⚡</div>
+                    <div class="item-info">
+                        <h3>Podwójne Punkty</h3>
+                        <p>Rozpocznij z mnożnikiem x2</p>
+                        <div class="item-price">Cena: 150 🪙</div>
+                    </div>
+                    <button id="buyMultiplier" class="shop-button">Kup</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-icon">🏃</div>
+                    <div class="item-info">
+                        <h3>Dodatkowy Skok</h3>
+                        <p>Możliwość podwójnego skoku</p>
+                        <div class="item-price">Cena: 200 🪙</div>
+                    </div>
+                    <button id="buyDoubleJump" class="shop-button">Kup</button>
+                </div>
+            </div>
+            <h2>Skiny</h2>
+            <div class="shop-items">
+                <div class="shop-item">
+                    <div class="item-icon">🤺</div>
+                    <div class="item-info">
+                        <h3>Rycerz</h3>
+                        <p>Domyślny skin</p>
+                        <div class="item-price">Wybrany</div>
+                    </div>
+                    <button id="selectKnight" class="shop-button selected">Wybrany</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-icon">🧙</div>
+                    <div class="item-info">
+                        <h3>Mag</h3>
+                        <p>Magiczny wojownik</p>
+                        <div class="item-price">Cena: 500 🪙</div>
+                    </div>
+                    <button id="selectWizard" class="shop-button">Kup</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-icon">🏹</div>
+                    <div class="item-info">
+                        <h3>Łucznik</h3>
+                        <p>Mistrz dystansu</p>
+                        <div class="item-price">Cena: 500 🪙</div>
+                    </div>
+                    <button id="selectArcher" class="shop-button">Kup</button>
+                </div>
+            </div>
+            <h2>Skiny Przeciwników</h2>
+            <div class="shop-items">
+                <div class="shop-item">
+                    <div class="item-icon">💀</div>
+                    <div class="item-info">
+                        <h3>Szkielet</h3>
+                        <p>Domyślny przeciwnik</p>
+                        <div class="item-price">Wybrany</div>
+                    </div>
+                    <button id="selectSkeleton" class="shop-button selected">Wybrany</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-icon">🧟</div>
+                    <div class="item-info">
+                        <h3>Zombie</h3>
+                        <p>Nieumarły wojownik</p>
+                        <div class="item-price">Cena: 300 🪙</div>
+                    </div>
+                    <button id="selectZombie" class="shop-button">Kup</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-icon">👻</div>
+                    <div class="item-info">
+                        <h3>Duch</h3>
+                        <p>Przerażający przeciwnik</p>
+                        <div class="item-price">Cena: 300 🪙</div>
+                    </div>
+                    <button id="selectGhost" class="shop-button">Kup</button>
+                </div>
+            </div>
+            <h2>Tła</h2>
+            <div class="shop-items">
+                <div class="shop-item">
+                    <div class="item-icon">🌄</div>
+                    <div class="item-info">
+                        <h3>Podstawowe</h3>
+                        <p>Domyślne tło</p>
+                        <div class="item-price">Wybrany</div>
+                    </div>
+                    <button id="selectDefaultBg" class="shop-button selected">Wybrany</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-icon">🌳</div>
+                    <div class="item-info">
+                        <h3>Dżungla</h3>
+                        <p>Tropikalna przygoda</p>
+                        <div class="item-price">Cena: 400 🪙</div>
+                    </div>
+                    <button id="selectJungleBg" class="shop-button">Kup</button>
+                </div>
+                <div class="shop-item">
+                    <div class="item-icon">🏰</div>
+                    <div class="item-info">
+                        <h3>Zamek</h3>
+                        <p>Średniowieczny zamek</p>
+                        <div class="item-price">Cena: 400 🪙</div>
+                    </div>
+                    <button id="selectCastleBg" class="shop-button">Kup</button>
+                </div>
+            </div>
+            <button id="shopBackButton" class="back-button">Powrót do Menu</button>
+        </div>
+
+        <canvas id="gameCanvas" class="hidden"></canvas>
+        <div id="score" class="hidden">0</div>
+        <div id="coinCounter" class="hidden"> 0</div>
+        
+        <button id="jumpButton" class="hidden">X</button>
+        
+        <div id="powerupButtons" class="hidden">
+            <button id="activateShield" class="powerup-button" disabled>
+                <div class="powerup-icon">🛡️</div>
+                <div class="powerup-count">0</div>
+            </button>
+            <button id="activateMultiplier" class="powerup-button" disabled>
+                <div class="powerup-icon">⚡</div>
+                <div class="powerup-count">0</div>
+            </button>
+        </div>
+
+        <div id="gameOver" class="hidden">
+            <h1 class="game-over-title">GAME OVER!</h1>
+            <div id="gameOverText" class="menu-text">Twój wynik: <span id="finalScore">0</span> | Zebrane monety: <span id="finalCoins">0</span></div>
+            <div class="button-container">
+                <button id="restartButton">Zagraj ponownie</button>
+                <button id="menuButton">Menu Główne</button>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

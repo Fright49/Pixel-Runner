@@ -1,0 +1,1244 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes slideIn {
+    from { transform: translate(-50%, -40%); }
+    to { transform: translate(-50%, -50%); }
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #000;
+    image-rendering: pixelated;
+    overscroll-behavior: contain;
+    -webkit-tap-highlight-color: transparent;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: url('game.gif') no-repeat center center;
+    background-size: cover;
+    image-rendering: pixelated;
+}
+
+.menu-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+    overflow-y: auto;
+}
+
+.menu-screen::-webkit-scrollbar {
+    width: 12px;
+}
+
+.menu-screen::-webkit-scrollbar-track {
+    background: rgba(74, 20, 140, 0.2);
+    border-radius: 10px;
+}
+
+.menu-screen::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #4a148c, #7b1fa2);
+    border-radius: 10px;
+    border: 2px solid #9c27b0;
+}
+
+.menu-screen::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #6a1b9a, #9c27b0);
+}
+
+.menu-screen h1 {
+    font-size: 48px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 4px 4px 0px #9b30ff,
+                 8px 8px 0px #000;
+    animation: pulse 2s infinite;
+    letter-spacing: 2px;
+    margin-top: 10vh;
+    margin-bottom: 8vh;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    margin-top: 5vh;
+}
+
+.menu-screen h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 3px 3px 0px #000;
+}
+
+.menu-text {
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0;
+    padding: 10px 0;
+    color: #e0e0ff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.menu-screen p {
+    font-size: 12px;
+    margin: 15px 0;
+    color: #fff;
+    text-align: center;
+    line-height: 2;
+    max-width: 90%;
+}
+
+.menu-screen button {
+    padding: 20px 40px;
+    font-size: 16px;
+    background: linear-gradient(45deg, #4a148c, #7b1fa2);
+    color: white;
+    border: 4px solid #9c27b0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 300px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(156, 39, 176, 0.5),
+                4px 4px 0px #000;
+    margin: 10px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-screen button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.8),
+                6px 6px 0px #000;
+    background: linear-gradient(45deg, #6a1b9a, #9c27b0);
+}
+
+.menu-screen button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 10px rgba(156, 39, 176, 0.3),
+                2px 2px 0px #000;
+}
+
+#gameCanvas {
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    margin: 0 auto;
+}
+
+#score {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: #fff;
+    z-index: 10;
+    padding: 10px 20px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+#coinCounter {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    font-size: 24px;
+    color: #ffd700;
+    z-index: 10;
+    padding: 10px 20px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+#gameOver {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: #000;
+    padding: 60px;
+    color: white;
+    border: 4px solid #fff;
+    min-width: 400px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards,
+               slideIn 0.5s ease-out forwards;
+    box-shadow: 8px 8px 0px #ff0000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 35px;
+}
+
+.game-over-title {
+    font-size: 48px;
+    color: #fff;
+    text-shadow: 4px 4px 0px #9b30ff,
+                 8px 8px 0px #000;
+    animation: pulse 2s infinite;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+#gameOverText {
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0;
+    padding: 10px 0;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#gameOver button {
+    padding: 20px 40px;
+    font-size: 16px;
+    background: linear-gradient(45deg, #4a148c, #7b1fa2);
+    color: white;
+    border: 4px solid #9c27b0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 300px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(156, 39, 176, 0.5),
+                4px 4px 0px #000;
+    margin: 10px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+#gameOver button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.8),
+                6px 6px 0px #000;
+    background: linear-gradient(45deg, #6a1b9a, #9c27b0);
+}
+
+#gameOver button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 10px rgba(156, 39, 176, 0.3),
+                2px 2px 0px #000;
+}
+
+.hidden {
+    display: none !important;
+    opacity: 0 !important;
+    animation: none !important;
+}
+
+#shopScreen {
+    padding: 10px;
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#shopScreen h2 {
+    font-size: 36px;
+    margin: 20px 0;
+    text-shadow: 4px 4px 0px #9b30ff,
+                 8px 8px 0px #000;
+}
+
+.shop-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+}
+
+.shop-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(74, 20, 140, 0.7);
+    border-radius: 10px;
+}
+
+.shop-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.5);
+}
+
+.item-icon {
+    font-size: 50px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    border: 2px solid #9c27b0;
+    flex-shrink: 0;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-info h3 {
+    margin: 0 0 10px 0;
+    color: #fff;
+    font-size: 24px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.item-info p {
+    margin: 0 0 15px 0;
+    color: #e0e0ff;
+    font-size: 16px;
+}
+
+.item-price {
+    color: #ffd700;
+    font-size: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.shop-button {
+    padding: 15px 30px;
+    font-size: 16px;
+    background: linear-gradient(45deg, #4a148c, #7b1fa2);
+    color: white;
+    border: 2px solid #9c27b0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+    border-radius: 5px;
+    min-width: 150px;
+    flex-shrink: 0;
+}
+
+.shop-button:hover {
+    background: linear-gradient(45deg, #6a1b9a, #9c27b0);
+    box-shadow: 0 0 15px rgba(156, 39, 176, 0.5);
+}
+
+.shop-button:disabled {
+    background: #666;
+    border-color: #888;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.back-button {
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 16px;
+    background: linear-gradient(45deg, #4a148c, #7b1fa2);
+    color: white;
+    border: 3px solid #9c27b0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(156, 39, 176, 0.3);
+    border-radius: 5px;
+    min-width: 300px;
+}
+
+.back-button:hover {
+    background: linear-gradient(45deg, #6a1b9a, #9c27b0);
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.5);
+}
+
+#powerupButtons {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.power-up-button {
+    width: 80px;
+    height: 80px;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #4a148c, #7b1fa2);
+    border: 3px solid #9c27b0;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+                inset 0 2px 5px rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.power-up-button::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent);
+    pointer-events: none;
+}
+
+.power-up-button:disabled {
+    background: linear-gradient(145deg, #666666, #444444);
+    border-color: #555555;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.power-up-button:active:not(:disabled) {
+    transform: scale(0.95) translateY(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.2);
+}
+
+.power-up-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #ff4081;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    border: 2px solid #fff;
+}
+
+.powerup-icon {
+    font-size: 32px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles for skin selection */
+.shop-button.selected {
+    background: linear-gradient(45deg, #1b5e20, #388e3c);
+    border-color: #4caf50;
+    cursor: default;
+}
+
+.shop-button.selected:hover {
+    background: linear-gradient(45deg, #1b5e20, #388e3c);
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    transform: none;
+}
+
+/* Separator between shop sections */
+.shop-items + h2 {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 2px solid rgba(156, 39, 176, 0.3);
+    width: 100%;
+    text-align: center;
+}
+
+#jumpButton {
+    display: none; /* Domyślnie ukryty na desktopie */
+}
+
+@media (max-width: 768px) {
+    #jumpButton {
+        display: flex;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #4a148c, #7b1fa2);
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        font-size: 24px;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        cursor: pointer;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+                    inset 0 2px 5px rgba(255, 255, 255, 0.2);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        -webkit-tap-highlight-color: transparent;
+        backdrop-filter: blur(5px);
+    }
+
+    #jumpButton::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent);
+        pointer-events: none;
+    }
+
+    #jumpButton:active {
+        transform: scale(0.95) translateY(2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 3px rgba(255, 255, 255, 0.2);
+        background: linear-gradient(145deg, #3a1070, #6a1b9a);
+    }
+
+    .menu-screen {
+        padding: 10px;
+        justify-content: center;
+    }
+
+    .menu-screen h1 {
+        font-size: 24px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 0px #9b30ff,
+                     4px 4px 0px #000;
+    }
+
+    .menu {
+        gap: 15px;
+        margin-top: 20px;
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .menu-screen button,
+    .shop-button,
+    .back-button {
+        min-height: 44px; /* Minimum touch target size for iOS */
+        margin: 10px 0;
+    }
+
+    .shop-item {
+        position: relative;
+        z-index: 5;
+    }
+
+    .menu-text {
+        font-size: 12px;
+        padding: 5px 10px;
+        max-width: 100%;
+    }
+
+    #gameOver {
+        width: 90%;
+        min-width: unset;
+        max-width: 350px;
+        padding: 20px;
+        border-width: 2px;
+        box-shadow: 4px 4px 0px #ff0000;
+    }
+
+    .game-over-title {
+        font-size: 24px;
+        text-shadow: 2px 2px 0px #9b30ff,
+                     4px 4px 0px #000;
+    }
+
+    #gameOverText {
+        font-size: 12px;
+        line-height: 1.5;
+        padding: 5px 0;
+    }
+
+    .button-container {
+        gap: 10px;
+    }
+
+    #gameOver button {
+        padding: 12px 20px;
+        font-size: 14px;
+        min-width: 200px;
+        margin: 5px 0;
+    }
+
+    /* Sklep na mobile */
+    #shopScreen {
+        padding: 10px;
+        height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .shop-items {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .shop-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 10px;
+        padding: 15px;
+        background: rgba(74, 20, 140, 0.7);
+        border-radius: 10px;
+    }
+
+    .item-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .item-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .item-info h3 {
+        font-size: 14px;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .item-info p {
+        font-size: 12px;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .item-price {
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .shop-button {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-width: 80px;
+        height: auto;
+        white-space: nowrap;
+    }
+
+    #shopCoins {
+        position: sticky;
+        top: 0;
+        font-size: 14px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 100;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .menu-screen h2 {
+        font-size: 18px;
+        margin: 15px 0;
+        padding: 10px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.8);
+        position: sticky;
+        top: 40px;
+        z-index: 99;
+    }
+
+    .back-button {
+        position: sticky;
+        bottom: 10px;
+        margin: 15px auto;
+        padding: 12px 20px;
+        font-size: 14px;
+        min-width: 200px;
+        z-index: 100;
+        display: block;
+    }
+
+    /* Instrukcje na mobile */
+    #instructionsScreen {
+        padding: 15px;
+    }
+
+    #instructionsScreen p {
+        font-size: 12px;
+        line-height: 1.5;
+        margin: 10px 0;
+    }
+
+    /* Poprawki dla orientacji poziomej na telefonach */
+    @media (orientation: landscape) {
+        .menu-screen {
+            padding: 5px;
+        }
+
+        .menu-screen h1 {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .menu {
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .menu-screen button,
+        .shop-button,
+        .back-button {
+            padding: 10px;
+            min-width: 180px;
+            margin: 3px 0;
+        }
+
+        #gameOver {
+            padding: 15px;
+        }
+
+        .game-over-title {
+            font-size: 20px;
+        }
+
+        #gameOver button {
+            padding: 8px 15px;
+            min-width: 160px;
+        }
+
+        .shop-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 5px;
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .shop-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            padding: 8px;
+            gap: 5px;
+            min-height: auto;
+            align-items: center;
+        }
+    }
+
+    .power-up-button {
+        width: 70px;
+        height: 70px;
+        font-size: 24px;
+    }
+
+    .power-up-count {
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+        top: -8px;
+        right: -8px;
+    }
+
+    .powerup-icon {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    #jumpButton {
+        width: 75px;
+        height: 75px;
+        font-size: 24px;
+        bottom: 30px;
+        right: 15px;
+    }
+
+    #powerupButtons {
+        bottom: 110px;
+        left: 15px;
+    }
+
+    .power-up-button {
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+    }
+
+    .power-up-count {
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+    }
+
+    .powerup-icon {
+        font-size: 24px;
+    }
+}
+
+/* Poprawki dla bardzo małych ekranów */
+@media (max-width: 320px) {
+    .menu-screen h1 {
+        font-size: 20px;
+    }
+
+    .menu-screen button,
+    .shop-button,
+    .back-button {
+        min-width: 160px;
+        font-size: 12px;
+    }
+
+    #gameOver {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .game-over-title {
+        font-size: 20px;
+    }
+
+    #gameOver button {
+        min-width: 160px;
+        font-size: 12px;
+    }
+}
+
+/* Poprawki dla tabletów */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .menu-screen h1 {
+        font-size: 36px;
+    }
+
+    .menu-screen button,
+    .shop-button,
+    .back-button {
+        min-width: 250px;
+    }
+
+    #gameOver {
+        max-width: 500px;
+    }
+
+    .shop-items {
+        max-width: 600px;
+    }
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.menu-screen button,
+.shop-button,
+.back-button {
+    position: relative;
+    z-index: 10;
+    touch-action: manipulation;
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .menu-screen {
+        padding: 5px;
+        overflow-y: scroll;
+        max-height: 100vh;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #shopScreen {
+        padding: 5px 10px;
+        height: 100vh;
+        overflow-y: scroll;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .shop-items {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 5px;
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .shop-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        padding: 8px;
+        gap: 5px;
+        min-height: auto;
+        align-items: center;
+    }
+
+    .item-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .item-info {
+        flex: 1;
+        padding: 0 5px;
+    }
+
+    .item-info h3 {
+        font-size: 12px;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .item-info p {
+        font-size: 8px;
+        margin-bottom: 2px;
+        line-height: 1.2;
+    }
+
+    .item-price {
+        font-size: 10px;
+    }
+
+    .shop-button {
+        padding: 5px;
+        font-size: 8px;
+        min-width: 60px;
+        height: auto;
+        white-space: nowrap;
+    }
+
+    .back-button {
+        position: sticky;
+        bottom: 10px;
+        margin: 5px 0 15px 0;
+        padding: 8px 15px;
+        font-size: 12px;
+        min-width: 150px;
+        z-index: 100;
+    }
+
+    #shopCoins {
+        position: sticky;
+        top: 0;
+        font-size: 12px;
+        margin: 5px 0;
+        padding: 5px;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 100;
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu-screen h2 {
+        font-size: 16px;
+        margin: 8px 0;
+        text-shadow: 2px 2px 0px #9b30ff,
+                     3px 3px 0px #000;
+        position: sticky;
+        top: 30px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 5px;
+        z-index: 99;
+        width: 100%;
+        text-align: center;
+    }
+
+    .shop-items + h2 {
+        margin-top: 15px;
+        padding-top: 15px;
+    }
+
+    .menu-text {
+        font-size: 10px;
+        padding: 3px;
+    }
+
+    /* Poprawka na scrollbar */
+    .menu-screen::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .menu-screen::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #4a148c, #7b1fa2);
+        border-radius: 4px;
+        border: 1px solid #9c27b0;
+    }
+}
+
+/* Style dla instrukcji */
+.instructions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.instruction-section {
+    background: rgba(74, 20, 140, 0.7);
+    border: 2px solid #9c27b0;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.instruction-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.5);
+}
+
+.instruction-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+    animation: pulse 2s infinite;
+}
+
+.instruction-section h3 {
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.instruction-section p {
+    color: #e0e0ff;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+/* Responsywność dla instrukcji */
+@media (min-width: 768px) {
+    .instructions-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .instructions-container {
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .instruction-section {
+        padding: 15px;
+    }
+
+    .instruction-icon {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .instruction-section h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .instruction-section p {
+        font-size: 12px;
+        line-height: 1.4;
+        margin: 8px 0;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .instructions-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 5px;
+    }
+
+    .instruction-section {
+        padding: 10px;
+    }
+
+    .instruction-icon {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+
+    .instruction-section h3 {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .instruction-section p {
+        font-size: 10px;
+        line-height: 1.3;
+        margin: 5px 0;
+    }
+}
+
+.menu-button {
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 18px;
+    border-radius: 25px;
+    background: linear-gradient(145deg, #4a148c, #7b1fa2);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 2px 5px rgba(255, 255, 255, 0.1);
+}
+
+.menu-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.menu-button:hover::before {
+    left: 100%;
+}
+
+.menu-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3),
+                inset 0 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.menu-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2),
+                inset 0 1px 3px rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .menu-button {
+        padding: 12px 24px;
+        font-size: 16px;
+        margin: 8px;
+    }
+}
+
+.score-display, .coins-display {
+    position: fixed;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 20px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+}
+
+.score-display {
+    top: 20px;
+    left: 20px;
+}
+
+.coins-display {
+    top: 20px;
+    right: 20px;
+}
+
+.score-display::before {
+    content: '🎯';
+    font-size: 24px;
+}
+
+.coins-display::before {
+    content: '💰';
+    font-size: 24px;
+}
+
+@media (max-width: 768px) {
+    .score-display, .coins-display {
+        padding: 8px 16px;
+        font-size: 16px;
+    }
+
+    .score-display::before,
+    .coins-display::before {
+        font-size: 20px;
+    }
+}
